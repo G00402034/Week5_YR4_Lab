@@ -11,7 +11,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
-
+// Put all methods into service class
     private final CustomerRepository customerRepository;
 
     public CustomerController(CustomerRepository customerRepository) {
