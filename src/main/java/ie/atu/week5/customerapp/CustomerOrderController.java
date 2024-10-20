@@ -14,7 +14,6 @@ import java.util.List;
 public class CustomerOrderController {
 
     private final CustomerRepository customerRepository;
-
     private final OrderRepository orderRepository;
 
     public CustomerOrderController(CustomerRepository customerRepository, OrderRepository orderRepository) {
@@ -24,12 +23,15 @@ public class CustomerOrderController {
 
     @PostMapping("/customer-with-orders")
     public ResponseEntity<String> createCustomerWithOrders(@RequestBody CustomerOrderRequest customerOrderRequest) {
-
         // 1. Save the Customer and get the generated customer ID
-
+        Customer savedCustomer = customerRepository.save(customerOrderRequest.getCustomer());
 
         // 2. Save the Orders and link them to the customer
-
+        List<Order> orders = customerOrderRequest.getOrders();
+        for (Order order : orders) {
+            order.setCustomerId(savedCustomer.getId()); // Link the order to the saved customer
+            orderRepository.save(order); // Save each order individually
+        }
 
         return ResponseEntity.ok("Customer and orders created successfully");
     }
